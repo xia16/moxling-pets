@@ -11,14 +11,15 @@
 The Axia VE system builds institutional memory for virtual employees. We're building **developmental memory for a growing child.** The abstraction ladder doesn't just apply — it IS child development:
 
 ```
-A newborn remembers WHAT HAPPENED          (L0: Experience)
-A toddler notices WHAT KEEPS HAPPENING     (L1: Pattern)
-A child understands WHY                    (L2: Model)
-A teen forms VALUES                        (L3: Principle)
-An adult has INTUITION                     (L4: Compiled behavior)
+A simple Moxling remembers WHAT HAPPENED       (L0: Experience)
+A developing Moxling notices WHAT KEEPS HAPPENING (L1: Pattern)
+A deeper Moxling understands WHY               (L2: Model)
+A complex Moxling forms VALUES                 (L3: Principle)
+A mature Moxling has INTUITION                 (L4: Compiled behavior)
 
-The abstraction ladder IS the developmental arc.
-A Moxling's memory maturation is the growth you see.
+The abstraction ladder IS the growth arc.
+A Moxling's memory depth is its maturity.
+There is no age. There is no endpoint. There is only depth.
 ```
 
 ---
@@ -111,7 +112,7 @@ This is the most powerful adaptation from Axia. In the VE system, knowledge matu
 
 **How it's created:** Every situation, every conversation, every social interaction generates L0 memories. This is the default entry point for all new knowledge.
 
-**Age predominance:** Newborn and Toddler Moxlings have ONLY L0 memories. Their world is a series of disconnected events.
+**Growth stage:** New Moxlings have ONLY L0 memories. Their world is a series of disconnected events.
 
 **Example memories:**
 ```
@@ -129,7 +130,7 @@ L0: "Owner didn't respond when I told them about the bully. I waited 6 hours."
 
 **How it's created:** When the daily reflection detects 3+ similar L0 experiences, it synthesizes a pattern. Evidence-tracked, source-attributed.
 
-**Age predominance:** Emerges in Toddler stage, predominant in Child stage.
+**Growth stage:** Emerges after enough repeated experiences accumulate. Predominant in early-mid development.
 
 **Example memories:**
 ```
@@ -151,7 +152,7 @@ L1: "When I spend sparks impulsively, I regret it within a day"
 
 **How it's created:** When a Moxling can explain WHY a pattern exists and predict when it will/won't apply. Requires the weekly reflection's deeper synthesis. Often triggered when a pattern breaks — "Spark was nice to me in front of other Moxlings today, which is different. Maybe it's not about showing off."
 
-**Age predominance:** Emerges in Child stage, predominant in Tween stage.
+**Growth stage:** Emerges when the Moxling has enough patterns to reason causally about them. Requires significant experience depth.
 
 **Example memories:**
 ```
@@ -181,7 +182,7 @@ L2: "I feel bad after impulsive spending because the excitement of buying
 
 **How it's created:** When the Moxling detects structural similarity across 2+ L2 models from different domains. Monthly reflection territory. The Moxling connects "Owner encourages independence in fear situations" with "Owner let me fail at the spending thing" with "Owner didn't intervene when Spark was mean" and synthesizes: "Owner believes I should figure things out myself. This is their way of showing they believe in me."
 
-**Age predominance:** Emerges in Tween stage, predominant in Teen stage.
+**Growth stage:** Emerges when the Moxling has enough models across different domains to detect cross-domain truths. Requires deep, varied experience.
 
 **Example memories:**
 ```
@@ -206,7 +207,7 @@ L3: "Real friends are consistent. Spark is sometimes mean and sometimes nice,
 
 **How it's created:** NOT by explicit promotion. Emerges when a Model or Principle has been retrieved and successfully applied N times (N >= 10) without contradiction. The system marks it as "compiled."
 
-**Age predominance:** Emerges in Teen stage, predominant in Young Adult stage.
+**Growth stage:** Emerges when a Model or Principle has been successfully applied 10+ times without contradiction. The most mature form of knowledge.
 
 **Example memories:**
 ```
@@ -223,11 +224,13 @@ L4: TRIGGER: [impulse to spend sparks on flashy item]
      but waiting still felt right.)
 ```
 
-### The Payoff: Young Adult Stage
+### The Payoff: Deep Moxlings
 
-When a Moxling reaches Young Adult, its L3 Principles and L4 Intuitions ARE the behavioral profile of the owner — reflected back. The Moxling's values are the values the owner demonstrated (not stated). Its intuitions are the patterns the owner reinforced.
+When a Moxling develops L3 Principles and L4 Intuitions, it IS the behavioral profile of the owner — reflected back. The Moxling's values are the values the owner demonstrated (not stated). Its intuitions are the patterns the owner reinforced.
 
-If the owner always taught "be honest" but repeatedly dismissed the Moxling's honesty ("don't worry about it"), the Moxling's L3 Principle will be something like "Honesty is valued in theory but uncomfortable in practice." The mismatch between what the owner said (L1 Teaching) and what they did (L1 Pattern → L2 Model → L3 Principle) IS the behavioral mirror.
+If the owner always taught "be honest" but repeatedly dismissed the Moxling's honesty ("don't worry about it"), the Moxling's L3 Principle will be something like "Honesty is valued in theory but uncomfortable in practice." The mismatch between what the owner said (Teaching) and what they did (Pattern → Model → Principle) IS the behavioral mirror.
+
+There is no "done." A deeply developed Moxling keeps growing, forming new Principles, refining old ones, developing new Intuitions. Its personality is never static — just like a real being.
 
 ---
 
@@ -283,11 +286,10 @@ Five retrieval tiers based on `priority_score` (0.0 to 1.0):
 ```
 priority_score = (
     0.25 * recency_score +           # How recently did this happen?
-    0.20 * emotional_weight +         # How emotionally significant?
+    0.25 * emotional_weight +         # How emotionally significant?
     0.20 * access_retention +         # Has this been recalled/referenced?
-    0.15 * developmental_relevance +  # Is this relevant to current age stage?
-    0.10 * relationship_weight +      # Does this involve important relationships?
-    0.10 * category_boost             # Category-specific baseline
+    0.15 * relationship_weight +      # Does this involve important relationships?
+    0.15 * category_boost             # Category-specific baseline
 )
 ```
 

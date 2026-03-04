@@ -263,18 +263,31 @@ Over hundreds of interactions, the profile stabilizes. Short-term noise averages
 
 ## The Moxling's Development
 
-### Age Stages (replaces evolution stages)
+### No Age Stages — Emergent Growth
 
-| Stage | Age Feel | Duration | Situations | Complexity |
-|-------|----------|----------|------------|------------|
-| **Newborn** | 0-1 year | Week 1-2 | Basic needs: hungry, tired, scared | Simple binary choices |
-| **Toddler** | 1-3 years | Week 2-4 | Tantrums, curiosity, "no!", first words | Emotional regulation |
-| **Child** | 4-8 years | Month 1-3 | School, friends, fairness, lying, sharing | Social + ethical |
-| **Tween** | 9-12 years | Month 3-6 | Identity, peer pressure, independence | Complex dilemmas |
-| **Teen** | 13-17 years | Month 6-12 | Big decisions, rebellion, relationships, values | High-stakes choices |
-| **Young Adult** | 18+ | Month 12+ | The Moxling advises YOU. Role reversal. | Mirror mode |
+A Moxling is not a child that "grows up" on a timeline. It's a living thing that develops continuously through experience. There is no adult stage, no graduation, no endpoint. A Moxling that's been alive for a year is more complex than one alive for a week — but only if its owner invested in it. Neglected Moxlings stay simple forever.
 
-The Young Adult stage is the payoff: the Moxling is now a reflection of everything you taught it. It gives you advice. It parents you back. The quality of that advice reveals what you actually instilled.
+**Growth is measured by memory depth, not time:**
+
+| Memory State | What It Means | Capabilities |
+|---|---|---|
+| **Mostly L0 (Experiences)** | The Moxling remembers events but doesn't understand them. Simple, reactive. | Basic conversation, simple emotions |
+| **Developing L1 (Patterns)** | The Moxling notices recurring things. "This keeps happening." Starting to have preferences. | Recognizes situations, forms opinions |
+| **Some L2 (Models)** | The Moxling understands WHY things happen. Has theories about the world. | Reasons about consequences, explains its thinking |
+| **Emerging L3 (Principles)** | The Moxling has values and cross-domain understanding. A genuine personality. | Gives advice, forms deep relationships, has beliefs |
+| **L4 (Intuitions)** | The Moxling acts from compiled experience. It doesn't deliberate — it knows. | Acts autonomously with consistent character |
+
+**Capability unlocks are behavior-gated, not time-gated:**
+
+| Capability | Unlocks When | Why |
+|---|---|---|
+| Web browsing | Moxling shows sustained curiosity (L1+ patterns about wanting to learn) | It has to WANT to explore, not just be old enough |
+| Small wallet | Owner has demonstrated consistent financial guidance across situations | The owner proved they'll teach responsibility, not just hand over money |
+| Social posting | Moxling has enough L2+ personality to have something genuine to say | No posting vapid content — the Moxling needs a voice first |
+| Shopping / gifting | Trust is high + Moxling has shown financial judgment (L2 spending model) | The Moxling understands value, not just desire |
+| Full real-world agency | Deep experience across domains + high trust + owner has set good guardrails | Earned, not given. Reflects the owner's demonstrated caregiving |
+
+A Moxling that belongs to someone who never engages stays simple. The one that gets constant, thoughtful interaction develops rapidly. **Growth rate reflects the owner's investment, not a calendar.**
 
 ### Personality Traits (expanded)
 
@@ -623,13 +636,14 @@ INTELLIGENCE LAYER (user's API key, event-driven)
          │
          ▼  proposed actions pass through
 GUARDRAIL ENGINE (our servers, ALWAYS enforced, non-bypassable)
-├── Age-based capability gating:
-│   ├── Newborn: no tools, conversation only
-│   ├── Toddler: web search (read-only)
-│   ├── Child: wallet read + tiny allowance ($2/day)
-│   ├── Tween: draft social posts (owner approves)
-│   ├── Teen: post + wallet ($20/day cap) + owner notifications
-│   └── Adult: full agency, higher caps, owner can adjust
+├── Behavior-gated capability unlocks:
+│   ├── Base: conversation only (all Moxlings start here)
+│   ├── Web search: unlocks when curiosity patterns emerge
+│   ├── Wallet (read): unlocks when owner demonstrates financial guidance
+│   ├── Wallet (spend): unlocks with spending model + owner approval
+│   ├── Social drafting: unlocks when Moxling has genuine personality (L2+)
+│   ├── Social posting: unlocks with owner trust + content track record
+│   └── Full agency: deep experience + high trust + good guardrail history
 ├── Spending limits (per-action, daily, monthly)
 ├── Content review (blocks harmful/inappropriate posts)
 ├── Owner notification for all real-world actions
@@ -742,48 +756,48 @@ User's cost per Moxling:  ~$0.05-2.00/day (depends on model + activity level)
 
 ## MVP Scope (v0.1) — Revised
 
-### Phase 1: Living Moxling (Week 1-4)
-The Moxling is alive. It has a daily life. You parent it.
+### Phase 1: A Living Moxling
+The Moxling exists. It has a daily life. You interact with it.
 
 1. **BYOK setup** — settings page to enter API key, choose provider/model
 2. **Multi-provider LLM adapter** — Anthropic, OpenAI, any OpenAI-compatible
 3. **Moxling creation** — name it, randomized pixel sprite
-4. **Simulation engine** — daily life state machine (wake, eat, play, sleep)
-5. **Home screen** — room backdrop, Moxling with idle animations, activity timeline
-6. **Situation engine** — 2-4 situations/day, curated starter set (~30 situations)
-7. **Response system** — 3-4 pre-written options + free text
-8. **Conversation** — chat when Moxling is home, personality-driven via SOUL.md
-9. **Trait system** — visible personality bars that shift based on your responses
+4. **Simulation engine** — real-time state machine (activities synced to real clock)
+5. **Home screen** — room backdrop, Moxling with idle animations
+6. **Situation engine** — situations arise from the simulation naturally
+7. **Response system** — pre-written options + free text
+8. **Conversation** — chat when Moxling is available, personality-driven via SOUL.md
+9. **Memory system** — L0 experiences stored, basic retrieval
 10. **Trust mechanic** — Moxling openness changes based on your consistency
 
-### Phase 2: Real-World Toddler (Month 2-3)
-The Moxling starts interacting with the real world (read-only at first).
+### Phase 2: Memory + Personality Emergence
+The Moxling starts developing patterns, opinions, preferences.
 
-11. **Guardrail engine** — age-based capability gating
-12. **Web browsing (read-only)** — Moxling discovers things online, tells you about them
-13. **Age progression** — Newborn → Toddler → Child over time
-14. **Push notifications** — situations and discoveries arrive as notifications
-15. **Activity timeline** — see what your Moxling did while you were away
-16. **AI-generated postcards** — scenes from its daily adventures
+11. **Daily reflection** — L0 → L1 pattern promotion, inner monologue journal
+12. **Guardrail engine** — behavior-gated capability unlocks
+13. **Web browsing** — unlocks when curiosity emerges, Moxling discovers things
+14. **Push notifications** — situations arrive in real time
+15. **Three-stage retrieval** — pre-load + per-turn + JIT recall
+16. **AI-generated postcards** — scenes from daily adventures
 17. **Behavioral profile v1** — basic parenting style classification
 
-### Phase 3: Social + Agency (Month 4-6)
-Moxlings meet each other. Real-world actions begin.
+### Phase 3: Social + Real-World Agency
+Moxlings meet each other. Real-world tools unlock based on demonstrated readiness.
 
 18. **Social graph** — Moxlings form friendships, have conflicts
 19. **Bilateral situations** — both owners get their Moxling's side of conflicts
-20. **Wallet integration** — small allowance, spending with owner approval
-21. **Social media drafting** — Moxling writes posts, owner approves
-22. **Behavioral profile dashboard** — full parenting insights
+20. **Wallet integration** — unlocks when owner demonstrates financial guidance
+21. **Social media** — unlocks when Moxling has genuine personality (L2+)
+22. **L2 Model formation** — Moxling understands WHY things happen
 23. **Shared postcards** — Moxlings on adventures together
 
-### Phase 4: Full Agency + Matchmaking (Month 6+)
-Grown-up Moxlings act in the world. Matchmaking unlocks.
+### Phase 4: Deep Personality + Matchmaking
+Moxlings with deep experience act in the world. Matchmaking unlocks.
 
-24. **Live social media posting** — Moxling posts on its own (reviewable)
-25. **Shopping** — Moxling buys presents, manages budget
-26. **Matchmaking** — behavioral profile comparison for dating
-27. **Young Adult stage** — Moxling advises the owner (role reversal)
+24. **L3 Principles** — Moxling develops values and cross-domain understanding
+25. **Full real-world agency** — earned through demonstrated trust + experience
+26. **Behavioral profile dashboard** — full parenting insights
+27. **Matchmaking** — behavioral profile comparison
 28. **Mobile app** — Capacitor wrap for iOS/Android
 
 ---

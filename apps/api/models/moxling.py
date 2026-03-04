@@ -4,13 +4,14 @@ from enum import Enum
 from pydantic import BaseModel, Field
 
 
-class AgeStage(str, Enum):
-    NEWBORN = "newborn"      # Week 1-2: basic needs
-    TODDLER = "toddler"      # Week 2-4: tantrums, "no!", first words
-    CHILD = "child"          # Month 1-3: school, friends, fairness
-    TWEEN = "tween"          # Month 3-6: identity, peer pressure
-    TEEN = "teen"            # Month 6-12: big decisions, rebellion
-    YOUNG_ADULT = "young_adult"  # Month 12+: role reversal, advises owner
+class AbstractionLevel(int, Enum):
+    """How deep the Moxling's understanding is — its cognitive maturity."""
+
+    EXPERIENCE = 0   # L0: remembers what happened
+    PATTERN = 1      # L1: notices what keeps happening
+    MODEL = 2        # L2: understands why
+    PRINCIPLE = 3    # L3: has values and cross-domain understanding
+    INTUITION = 4    # L4: acts from compiled experience
 
 
 class MoxlingTraits(BaseModel):
@@ -45,11 +46,13 @@ class Moxling(BaseModel):
     id: str
     name: str
     owner_id: str
-    age_stage: AgeStage = AgeStage.NEWBORN
+    max_abstraction: AbstractionLevel = AbstractionLevel.EXPERIENCE  # highest level reached
     traits: MoxlingTraits = Field(default_factory=MoxlingTraits)
     appearance: MoxlingAppearance = Field(default_factory=MoxlingAppearance)
     soul: str = ""  # SOUL.md — core identity, updated by the Moxling itself
     memory: str = ""  # MEMORY.md — facts and history
+    # Capability unlock state (behavior-gated, not time-gated)
+    capabilities: list[str] = Field(default_factory=list)  # e.g. ["web_search", "wallet_read"]
     born_at: datetime = Field(default_factory=datetime.utcnow)
     last_active: datetime = Field(default_factory=datetime.utcnow)
     mood: str = "content"
