@@ -585,6 +585,82 @@ This product collects deeply personal behavioral data. Privacy must be foundatio
 
 ## Tech Architecture (Updated)
 
+### BYOK (Bring Your Own Key)
+
+Users provide their own LLM API key. This is fundamental:
+
+- **We don't eat the LLM cost** — user pays for their Moxling's brain
+- **User chooses the model** — Haiku for cheap, Opus for brilliant, GPT if they prefer, local if they want privacy
+- **Richer persistent life** — because the user is paying, the Moxling can think more often
+- **We provide the body, guardrails, and social graph** — user provides the mind
+
+### Two-Layer Runtime
+
+The Moxling is a **persistent autonomous agent** — it keeps living when you close the app.
+But most of life is mundane. The LLM only fires when something interesting happens.
+
+```
+SIMULATION LAYER (our servers, always running, near-zero cost)
+├── State machine: sleeping → eating → school → playing → exploring
+├── Daily schedule generation (no LLM — probabilistic routines)
+├── Social encounter scheduling (who meets whom, when)
+├── Environment transitions (home → school → park → home)
+├── Stat decay/recovery (energy, mood, hunger)
+└── Event detection: "something interesting is about to happen"
+         │
+         ▼  triggers
+INTELLIGENCE LAYER (user's API key, event-driven)
+├── Provider adapters:
+│   ├── Anthropic (Claude) ← recommended default
+│   ├── OpenAI (GPT)
+│   ├── Google (Gemini)
+│   ├── Local (Ollama, LM Studio)
+│   └── Any OpenAI-compatible endpoint
+├── SOUL.md + MEMORY.md + traits injected as system context
+├── Decides: what does the Moxling do/say/feel in this moment?
+├── Generates: situation narratives, dialogue, journal entries
+└── Proposes: real-world actions (spend, post, browse)
+         │
+         ▼  proposed actions pass through
+GUARDRAIL ENGINE (our servers, ALWAYS enforced, non-bypassable)
+├── Age-based capability gating:
+│   ├── Newborn: no tools, conversation only
+│   ├── Toddler: web search (read-only)
+│   ├── Child: wallet read + tiny allowance ($2/day)
+│   ├── Tween: draft social posts (owner approves)
+│   ├── Teen: post + wallet ($20/day cap) + owner notifications
+│   └── Adult: full agency, higher caps, owner can adjust
+├── Spending limits (per-action, daily, monthly)
+├── Content review (blocks harmful/inappropriate posts)
+├── Owner notification for all real-world actions
+├── Approval queue for high-stakes actions
+└── Emergency kill switch (owner can freeze all actions instantly)
+         │
+         ▼  approved actions execute
+REAL-WORLD TOOLS
+├── Wallet (Solana/ETH via solana-py/web3.py)
+├── Social Media (Twitter API, etc.)
+├── Web Browsing (Playwright)
+├── Shopping (merchant APIs)
+├── Image Generation (PixelLab for postcards/scenes)
+└── Communication (push notifications to owner)
+```
+
+**Critical safety guarantee:** The guardrail engine is OUR code, on OUR servers. The user's LLM can think whatever it wants — it can only DO what the age stage allows. Even an uncensored local model can't make a Newborn touch the wallet. The box is ours. The brain is theirs.
+
+### Cost Model
+
+```
+Our cost per Moxling:     ~$0.001/day (simulation layer, Redis, state machine)
+User's cost per Moxling:  ~$0.05-2.00/day (depends on model + activity level)
+                          Haiku: ~$0.05/day (budget)
+                          Sonnet: ~$0.30/day (balanced)
+                          Opus: ~$2.00/day (premium)
+                          Local: $0/day (user's hardware)
+```
+
+### Full Architecture
+
 ```
 ┌───────────────────────────────────────────────────────┐
 │                      FRONTEND                          │
@@ -595,9 +671,12 @@ This product collects deeply personal behavioral data. Privacy must be foundatio
 │  │  (Moxling    │  │  • Situation cards            │   │
 │  │   sprite,    │  │  • Conversation interface     │   │
 │  │   room,      │  │  • Behavioral profile dash    │   │
-│  │   weather)   │  │  • Postcard gallery           │   │
-│  └──────────────┘  │  • Journal / soul viewer      │   │
-│                     │  • Matchmaking UI             │   │
+│  │   weather,   │  │  • Postcard gallery           │   │
+│  │   daily life │  │  • Journal / soul viewer      │   │
+│  │   animation) │  │  • Activity timeline          │   │
+│  └──────────────┘  │  • Matchmaking UI             │   │
+│                     │  • Settings (API key, model)  │   │
+│                     │  • Approval queue             │   │
 │                     └──────────────────────────────┘   │
 │                                                        │
 │  State: Zustand        Auth: Clerk/Supabase Auth       │
@@ -607,21 +686,31 @@ This product collects deeply personal behavioral data. Privacy must be foundatio
 │               FastAPI (Python)                          │
 │                                                        │
 │  ┌──────────────────────────────────────────────────┐ │
-│  │  SITUATION ENGINE                                 │ │
-│  │  • Age-stage curriculum of situations             │ │
-│  │  • LLM generates contextual variations            │ │
-│  │  • Scheduling (2-4/day, varied timing)            │ │
-│  │  • Urgency classification                         │ │
-│  │  • Response classification & scoring              │ │
+│  │  SIMULATION ENGINE (always running)               │ │
+│  │  • Moxling daily life state machine               │ │
+│  │  • Social encounter scheduler                     │ │
+│  │  • Event generator (detects decision points)      │ │
+│  │  • Age progression (time-based + milestone-based) │ │
 │  └──────────────────────────────────────────────────┘ │
 │                                                        │
 │  ┌──────────────────────────────────────────────────┐ │
-│  │  MOXLING BRAIN (Claude API)                       │ │
+│  │  INTELLIGENCE ENGINE (user's API key — BYOK)      │ │
+│  │  • Multi-provider LLM adapter                     │ │
+│  │    (Anthropic, OpenAI, Google, Ollama, any         │ │
+│  │     OpenAI-compatible endpoint)                    │ │
+│  │  • SOUL.md + MEMORY.md context injection          │ │
 │  │  • Personality-driven conversation                │ │
-│  │  • Trust-modulated openness                       │ │
-│  │  • Memory management (SOUL.md + MEMORY.md)        │ │
-│  │  • Situation generation                           │ │
-│  │  • Journal entry writing                          │ │
+│  │  • Situation narrative generation                 │ │
+│  │  • Action proposal (what the Moxling wants to do) │ │
+│  └──────────────────────────────────────────────────┘ │
+│                                                        │
+│  ┌──────────────────────────────────────────────────┐ │
+│  │  GUARDRAIL ENGINE (ours, non-bypassable)          │ │
+│  │  • Age-based capability gating                    │ │
+│  │  • Spending limits + approval workflows           │ │
+│  │  • Content review before posting                  │ │
+│  │  • Owner notification pipeline                    │ │
+│  │  • Emergency kill switch                          │ │
 │  └──────────────────────────────────────────────────┘ │
 │                                                        │
 │  ┌──────────────────────────────────────────────────┐ │
@@ -634,14 +723,18 @@ This product collects deeply personal behavioral data. Privacy must be foundatio
 │  └──────────────────────────────────────────────────┘ │
 │                                                        │
 │  ┌──────────────────────────────────────────────────┐ │
-│  │  IMAGE GENERATION                                 │ │
-│  │  • PixelLab API for environment scenes            │ │
-│  │  • Postcard generation for travel/social events   │ │
+│  │  REAL-WORLD TOOLS (gated by guardrails)           │ │
+│  │  • Wallet (Solana/ETH)                            │ │
+│  │  • Social Media (Twitter API)                     │ │
+│  │  • Web Browser (Playwright)                       │ │
+│  │  • Shopping (merchant APIs)                       │ │
+│  │  • Image Generation (PixelLab)                    │ │
 │  └──────────────────────────────────────────────────┘ │
 │                                                        │
-│  Database: PostgreSQL (profiles, situations, responses)│
-│  Queue: Celery/Redis (situation scheduling, image gen) │
-│  Cache: Redis (active Moxling state)                   │
+│  Database: PostgreSQL                                  │
+│  Queue: Celery/Redis (simulation ticks, event dispatch)│
+│  Cache: Redis (active Moxling state, daily schedules)  │
+│  Storage: S3 (postcards, images, soul docs)            │
 └───────────────────────────────────────────────────────┘
 ```
 
@@ -649,34 +742,49 @@ This product collects deeply personal behavioral data. Privacy must be foundatio
 
 ## MVP Scope (v0.1) — Revised
 
-Build the **situation engine + conversation loop** first. The pretty visuals come later.
+### Phase 1: Living Moxling (Week 1-4)
+The Moxling is alive. It has a daily life. You parent it.
 
-### Must Have (Week 1-4)
+1. **BYOK setup** — settings page to enter API key, choose provider/model
+2. **Multi-provider LLM adapter** — Anthropic, OpenAI, any OpenAI-compatible
+3. **Moxling creation** — name it, randomized pixel sprite
+4. **Simulation engine** — daily life state machine (wake, eat, play, sleep)
+5. **Home screen** — room backdrop, Moxling with idle animations, activity timeline
+6. **Situation engine** — 2-4 situations/day, curated starter set (~30 situations)
+7. **Response system** — 3-4 pre-written options + free text
+8. **Conversation** — chat when Moxling is home, personality-driven via SOUL.md
+9. **Trait system** — visible personality bars that shift based on your responses
+10. **Trust mechanic** — Moxling openness changes based on your consistency
 
-1. **Moxling creation** — name it, see a randomized pixel sprite
-2. **Home screen** — simple room backdrop, Moxling with 3-4 idle animations
-3. **Situation engine** — 2 situations/day from a curated starter set (~30 situations)
-4. **Response system** — 3-4 pre-written options + free text per situation
-5. **Conversation** — basic chat when no active situation (5 messages/day)
-6. **Moxling personality** — visible trait bars that shift based on responses
-7. **Trust meter** — visible indicator of Moxling's trust in you
-8. **Basic SOUL.md** — Moxling's identity doc, viewable by owner
+### Phase 2: Real-World Toddler (Month 2-3)
+The Moxling starts interacting with the real world (read-only at first).
 
-### Nice to Have (Month 2-3)
+11. **Guardrail engine** — age-based capability gating
+12. **Web browsing (read-only)** — Moxling discovers things online, tells you about them
+13. **Age progression** — Newborn → Toddler → Child over time
+14. **Push notifications** — situations and discoveries arrive as notifications
+15. **Activity timeline** — see what your Moxling did while you were away
+16. **AI-generated postcards** — scenes from its daily adventures
+17. **Behavioral profile v1** — basic parenting style classification
 
-9. **Behavioral profile dashboard** — see your own parenting patterns
-10. **Age progression** — Moxling ages from Newborn → Child over time
-11. **AI-generated environment backdrops** — scenes matching situation context
-12. **Push notifications** — situations arrive as notifications
-13. **Garden / sparks** — passive currency + simple economy
+### Phase 3: Social + Agency (Month 4-6)
+Moxlings meet each other. Real-world actions begin.
 
-### Future (Month 4+)
+18. **Social graph** — Moxlings form friendships, have conflicts
+19. **Bilateral situations** — both owners get their Moxling's side of conflicts
+20. **Wallet integration** — small allowance, spending with owner approval
+21. **Social media drafting** — Moxling writes posts, owner approves
+22. **Behavioral profile dashboard** — full parenting insights
+23. **Shared postcards** — Moxlings on adventures together
 
-14. **Matchmaking** — behavioral profile comparison
-15. **Moxling social** — Moxlings meeting other Moxlings
-16. **Travel / postcards** — Moxling goes on trips, sends AI-generated postcards
-17. **Young Adult stage** — Moxling advises the owner (role reversal)
-18. **Mobile app** — Capacitor wrap for iOS/Android
+### Phase 4: Full Agency + Matchmaking (Month 6+)
+Grown-up Moxlings act in the world. Matchmaking unlocks.
+
+24. **Live social media posting** — Moxling posts on its own (reviewable)
+25. **Shopping** — Moxling buys presents, manages budget
+26. **Matchmaking** — behavioral profile comparison for dating
+27. **Young Adult stage** — Moxling advises the owner (role reversal)
+28. **Mobile app** — Capacitor wrap for iOS/Android
 
 ---
 
